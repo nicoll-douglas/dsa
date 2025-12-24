@@ -160,7 +160,7 @@ class LinkedList(Generic[T]):
     # fed
 
     def delete_first(self) -> T:
-        """Delete the head of the linked list and return its value.
+        """Delete the head of the linked list and return its value or raise an IndexError if the linked list is empty.
         
         Time complexity is the best case time complexity of the `delete` method so O(1).
         """
@@ -168,7 +168,7 @@ class LinkedList(Generic[T]):
     # fed
 
     def delete_last(self) -> T:
-        """Delete the tail of the linked list and return its value.
+        """Delete the tail of the linked list and return its value or raise an IndexError if the linked list is empty.
         
         Time complexity is the worst case time complexity of the `delete` method so O(1).
         """
@@ -176,7 +176,7 @@ class LinkedList(Generic[T]):
     # fed
 
     def get(self, index: int) -> T:
-        """Get an item from the linked list at the specified index or throw an IndexError if out of bounds.
+        """Get an item from the linked list at the specified index or raise an IndexError if out of bounds.
     
         Time complexity mirrors the time complexity of the `_traverse` method so worst and average case O(n) and best case O(1).
         """
@@ -184,19 +184,19 @@ class LinkedList(Generic[T]):
     # fed
 
     def head(self) -> T:
-        """Get the value at the head of the linked list.
+        """Get the value at the head of the linked list or raise an IndexError if the linked list is empty.
         
         Time complexity is O(1) given that we have a reference to the head of the linked list.
         """
-        return self._head.value
+        return self.get(0)
     # fed
 
     def tail(self) -> T:
-        """Get the value at the tail of the linked list.
+        """Get the value at the tail of the linked list or raise an IndexError if the linked list is empty.
 
         Time complexity is O(1) given that we have a reference to the tail of the linked list.
         """
-        return self._tail.value
+        return self.get(self.length - 1)
     # fed
 
     def set(self, index: int, value: T) -> None:
