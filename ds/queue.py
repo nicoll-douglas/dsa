@@ -5,7 +5,7 @@ from .array import Array
 T = TypeVar("T")
 
 class Queue(Generic[T]):
-    """A class that implements a linked-list-based queue."""
+    """A class that implements a linked-list-based double-ended queue."""
  
     class QueueIndexError(IndexError):
         """Custom error class for queue index out of bounds errors."""
@@ -35,6 +35,26 @@ class Queue(Generic[T]):
         """
         try:
             return self._queue.delete_first()
+        except LinkedList.LinkedListIndexError as e:
+            raise self.QueueIndexError from e
+        # yrt
+    # fed
+
+    def enqueue_first(self, value: T) -> None:
+        """Add an element to the queue at the front.
+        
+        The front of the queue is at the head of the internal linked list. So, enqueue time complexity is O(1) given that we are adding a new element before the head which the linked list has a reference to.
+        """
+        self._queue.prepend(value)
+    # fed
+
+    def dequeue_last(self) -> T:
+        """Remove an element from the back of the queue and return it or raise a QueueIndexError if the queue is empty.
+        
+        The back of the queue is at the tail of the internal linked list. So, dequeue time complexity is O(1) given that we are deleting and retrieving the tail which we have a reference to.
+        """
+        try:
+            return self._queue.delete_last()
         except LinkedList.LinkedListIndexError as e:
             raise self.QueueIndexError from e
         # yrt
