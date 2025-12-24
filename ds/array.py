@@ -17,14 +17,14 @@ class Array(Generic[T]):
     def _validate_less_than_eq_to_n(self, value: int) -> None:
         """Do nothing if the given value is between 0 and the array length inclusive or raise an IndexError."""
         if value < 0 or value > self.length:
-            raise IndexError
+            raise IndexError("Array index out of bounds")
         # fi
     # fed
 
     def _validate_index(self, index: int) -> None:
-        """Do nothing if the given in index is within valid bounds for the array or raise an IndexError."""
+        """Do nothing if the given index is within valid bounds for the array or raise an IndexError."""
         if index == self.length:
-            raise IndexError
+            raise IndexError("Array index out of bounds")
         # fi
 
         self._validate_less_than_eq_to_n(index)

@@ -48,14 +48,14 @@ class LinkedList(Generic[T]):
     def _validate_less_than_eq_to_n(self, value: int) -> None:
         """Do nothing if the given value is between 0 and the linked list length inclusive or raise an IndexError."""
         if value < 0 or value > self.length:
-            raise IndexError
+            raise IndexError("Linked list index out of bounds")
         # fi
     # fed
 
     def _validate_index(self, index: int) -> None:
-        """Do nothing if the given in index is within valid bounds for the linked list or raise an IndexError."""
+        """Do nothing if the given index is within valid bounds for the linked list or raise an IndexError."""
         if index == self.length:
-            raise IndexError
+            raise IndexError("Linked list index out of bounds")
         # fi
 
         self._validate_less_than_eq_to_n(index)
