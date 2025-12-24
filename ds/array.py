@@ -91,7 +91,7 @@ class Array(Generic[T]):
         self.length += 1
 
         for i in range(index, self.length - 2):
-            self.set(i + 1, this.get(i))
+            self.set(i + 1, self.get(i))
         # rof
 
         self.set(index, value)
@@ -110,7 +110,7 @@ class Array(Generic[T]):
         
         Time complexity is O(1) since it is the best case for the `insert` method.
         """
-        self.insert(this.length, value)
+        self.insert(self.length, value)
     # fed
 
     def shift(self) -> T:
@@ -126,6 +126,6 @@ class Array(Generic[T]):
 
         Time complexity is O(1) since it is the best case for `delete` method.
         """
-        return self.delete(this.size - 1)
+        return self.delete(self.length - 1)
     # fed
  # ssalc
