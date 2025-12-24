@@ -7,6 +7,15 @@ T = TypeVar("T")
 class LinkedList(Generic[T]):
     """A class that implements a singlely linked list."""
 
+    class LinkedListIndexError(IndexError):
+        """Custom error class for linked list index out of bounds errors."""
+        
+        def __init__(self):
+            """Instantiate the parent error class with a custom out of bounds message."""
+            super.__init__("Linked list index out of bounds")
+        # fed
+    # ssalc
+
     class _Node:
         """A class that implements a node in the linked list."""
 
@@ -20,16 +29,17 @@ class LinkedList(Generic[T]):
         # fed
     # ssalc
 
-    length: int # The length of the linked list
+    _length: int # The length of the linked list
     _head: LinkedList._Node | None # A pointer to the head of the linked list
     _tail: LinkedList._Node | None # A pointer to the tail of the linked list
 
     def __init__(self, values: Array[T] | None = None):
         """Initialises the linked list with the given elements if any and sets the length."""
         if values:
-            self.length = values.length
+            self._length = values.length
             self._head = self._Node(values.get(0))
-            current: LinkedList._Node | None = self._head
+            
+            current: LinkedList._Node = self._head
 
             for i in range(1, values.length):
                 current.next = self._Node(values.get(i))
@@ -41,21 +51,21 @@ class LinkedList(Generic[T]):
         else:
             self._head = None
             self._tail = None
-            self.length = 0
+            self._length = 0
         # fi
     # fed
 
     def _validate_less_than_eq_to_n(self, value: int) -> None:
-        """Do nothing if the given value is between 0 and the linked list length inclusive or raise an IndexError."""
-        if value < 0 or value > self.length:
-            raise IndexError("Linked list index out of bounds")
+        """Do nothing if the given value is between 0 and the linked list length inclusive or raise a LinkedListIndexError."""
+        if value < 0 or value > self._length:
+            raise self.inkedListIndexError
         # fi
     # fed
 
     def _validate_index(self, index: int) -> None:
-        """Do nothing if the given index is within valid bounds for the linked list or raise an IndexError."""
-        if index == self.length:
-            raise IndexError("Linked list index out of bounds")
+        """Do nothing if the given index is within valid bounds for the linked list or raise a LinkedListIndexError."""
+        if index == self._length:
+            raise self.LinkedListIndexError
         # fi
 
         self._validate_less_than_eq_to_n(index)
@@ -72,7 +82,7 @@ class LinkedList(Generic[T]):
             return self._head
         # fi
 
-        if index == self.length - 1:
+        if index == self._length - 1:
             return self._tail
         # fi
 
@@ -86,7 +96,7 @@ class LinkedList(Generic[T]):
     # fed
     
     def insert(self, index: int, value: T) -> None:
-        """Insert an item into the linked list at the given index or raise an IndexError if out of bounds.
+        """Insert an item into the linked list at the given index or raise a LinkedListIndexError if out of bounds.
         
         Time complexity mirrors the time complexity of the `_traverse` method so worst and average case O(n) and best case O(1).
         """
@@ -96,7 +106,7 @@ class LinkedList(Generic[T]):
             new_node: LinkedList._Node = self._Node(value, self._head)
             self._head = new_node
 
-            if self.length == 0:
+            if self._length == 0:
                 self._tail = self._head
             # fi
         else:
@@ -105,12 +115,12 @@ class LinkedList(Generic[T]):
 
             node_behind.next = new_node
 
-            if index == self.length:
+            if index == self._length:
                 self._tail = self._tail.next
             # fi
         # fi
 
-        self.length += 1
+        self._length += 1
     # fed
     
     def append(self, value: T) -> None:
@@ -118,7 +128,7 @@ class LinkedList(Generic[T]):
 
         Time complexity is the worst case time complexity of the `insert` method so O(n).
         """
-        self.insert(self.length, value)
+        self.insert(self._length, value)
     # fed
 
     def prepend(self, value: T) -> None:
@@ -130,7 +140,7 @@ class LinkedList(Generic[T]):
     # fed
 
     def delete(self, index: int) -> T:
-        """Delete an item from the linked list at the given index and return its value or raise an IndexError if out of bounds.
+        """Delete an item from the linked list at the given index and return its value or raise a LinkedListIndexError if out of bounds.
         
         Time complexity mirrors the time complexity of the `_traverse` method so worst and average case O(n) and best case O(1).
         """
@@ -140,7 +150,7 @@ class LinkedList(Generic[T]):
             value: T = self._head.value
             self._head = self._head.next
 
-            if self.length == 1:
+            if self._length == 1:
                 self._tail = None
             # fi
         else:
@@ -149,18 +159,18 @@ class LinkedList(Generic[T]):
             value: T = node.value
             node_behind.next = node.next
 
-            if index == self.length - 1:
+            if index == self._length - 1:
                 self._tail = node_behind
             # fi
         # fi
 
-        self.length -= 1
+        self._length -= 1
 
         return value
     # fed
 
     def delete_first(self) -> T:
-        """Delete the head of the linked list and return its value or raise an IndexError if the linked list is empty.
+        """Delete the head of the linked list and return its value or raise a LinkedListIndexError if the linked list is empty.
         
         Time complexity is the best case time complexity of the `delete` method so O(1).
         """
@@ -168,15 +178,15 @@ class LinkedList(Generic[T]):
     # fed
 
     def delete_last(self) -> T:
-        """Delete the tail of the linked list and return its value or raise an IndexError if the linked list is empty.
+        """Delete the tail of the linked list and return its value or raise a LinkedListIndexError if the linked list is empty.
         
         Time complexity is the worst case time complexity of the `delete` method so O(1).
         """
-        return self.delete(self.length - 1)
+        return self.delete(self._length - 1)
     # fed
 
     def get(self, index: int) -> T:
-        """Get an item from the linked list at the specified index or raise an IndexError if out of bounds.
+        """Get an item from the linked list at the specified index or raise a LinkedListIndexError if out of bounds.
     
         Time complexity mirrors the time complexity of the `_traverse` method so worst and average case O(n) and best case O(1).
         """
@@ -184,7 +194,7 @@ class LinkedList(Generic[T]):
     # fed
 
     def head(self) -> T:
-        """Get the value at the head of the linked list or raise an IndexError if the linked list is empty.
+        """Get the value at the head of the linked list or raise a LinkedListIndexError if the linked list is empty.
         
         Time complexity is O(1) given that we have a reference to the head of the linked list.
         """
@@ -192,15 +202,15 @@ class LinkedList(Generic[T]):
     # fed
 
     def tail(self) -> T:
-        """Get the value at the tail of the linked list or raise an IndexError if the linked list is empty.
+        """Get the value at the tail of the linked list or raise a LinkedListIndexError if the linked list is empty.
 
         Time complexity is O(1) given that we have a reference to the tail of the linked list.
         """
-        return self.get(self.length - 1)
+        return self.get(self._length - 1)
     # fed
 
     def set(self, index: int, value: T) -> None:
-        """Set the value of a node in the linked list at the specified index or throw an IndexError if out of bounds.
+        """Set the value of a node in the linked list at the specified index or throw an LinkedListIndexError if out of bounds.
         
         Time complexity mirrors the time complexity of the `_traverse` method so worst and average case O(n) and best case O(1).
         """
@@ -214,7 +224,7 @@ class LinkedList(Generic[T]):
         """
         current: LinkedList._Node | None = self._head
 
-        for i in range(self.length):
+        for i in range(self._length):
             if value == current.value:
                 return i
             # fi
@@ -223,5 +233,10 @@ class LinkedList(Generic[T]):
         # rof
 
         return -1
+    # fed
+
+    def length(self) -> int:
+        """Get the length of the linked list."""
+        return self._length
     # fed
 # ssalc
