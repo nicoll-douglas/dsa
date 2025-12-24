@@ -107,6 +107,7 @@ class LinkedList(Generic[T]):
 
             if index == self.length:
                 self._tail = self._tail.next
+            # fi
         # fi
 
         self.length += 1
@@ -150,6 +151,7 @@ class LinkedList(Generic[T]):
 
             if index == self.length - 1:
                 self._tail = node_behind
+            # fi
         # fi
 
         self.length -= 1
