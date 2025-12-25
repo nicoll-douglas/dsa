@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TypeVar, Generic, List
+from typing import TypeVar, Generic, List, Callable
 from .array import Array
 
 T = TypeVar("T")
@@ -217,22 +217,97 @@ class LinkedList(Generic[T]):
         self._traverse(index).value = value
     # fed
 
-    def search(self, value: T) -> int:
-        """Linearly search for an item in the linked list and return the index of the first occurence or -1 if it is not in the linked list.
-        
-        Time complexity mirrors the time complexity of the `_traverse` method so worst and average case O(n) and best case O(1) with the item being at the head.
+    def find(self, match: Callable[[T], bool]) -> T | None:
+        """Linearly search for an item in the linked list based on a matching function.
+
+        Each value in the linked list will be passed to the matching function until a match is found.
+
+        Time complexity mirrors the time complexity of the `_traverse` method so worst and average case O(n) and best case O(1) with the target being at the head.
+
+        Arguments
+        ---------
+        match
+            The matching function.
+
+        Returns
+        -------
+        The first occurrence of a value that passes the matching function or None if none found.
         """
         current: LinkedList._Node | None = self._head
 
-        for i in range(self._length):
-            if value == current.value:
-                return i
+        while current:
+            if match(current.value):
+                return current.value
             # fi
 
             current = current.next
-        # rof
+        # elihw
+    
+        return None
+    # fed
 
-        return -1
+    def map(self, mapper: Callable[[T], T]) -> None:
+        """Map each item in the linked list to another based on a mapper function.
+
+        Each value in the linked list will be passed to the map function and replaced with its return value.
+
+        Time complexity is O(n) since we traverse the whole list.
+
+        Arguments
+        ---------
+        mapper
+            The mapper function.
+        """
+        current: LinkedList._Node | None = self._head
+
+        while current:
+            current.value = mapper(current.value)
+            current = current.next
+        # rof
+    # fed
+
+    def filter(self, match: Callable[[T], bool]) -> None:
+        """Filter the linked list to only items that pass the given matching function.
+
+        Each value in the linked list will be passed to the matching function and kept if it passes or deleted if it doesn't.
+
+        Time complexity is O(n) since we traverse the whole list.
+
+        Arguments
+        ---------            
+        match
+            The matching function.
+        """
+        while self._head and not match(self._head.value):
+            self.delete_first() # O(1)
+        # elihw
+
+        node_behind: LinkedList._Node | None = self._head
+
+        while node_behind and node_behind.next:
+            if not match(node_behind.next.value):
+                node_behind.next = node_behind.next.next
+            else:
+                node_behind = node_behind.next
+            # fi
+        # elihw
+    # fed
+
+    def for_each(self, callback: Callable[[T], None]) -> None:
+        """Traverse the linked list and run a callback for each item, passing the item.
+
+        Argument
+        ---------
+        callback
+            The callback to run for each value.
+        """
+        current: LinkedList._Node | None = self._head
+        
+        for i in range(self._length):
+            callback(current.value)
+
+            current = current.next
+        # rof
     # fed
 
     def length(self) -> int:

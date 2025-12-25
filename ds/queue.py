@@ -12,6 +12,7 @@ class Queue(Generic[T]):
         
         def __init__(self):
             super().__init__("Queue index out of bounds")
+        # fed
 
     _queue: LinkedList[T] # The underlying container for the queue
 
