@@ -303,7 +303,7 @@ class LinkedList(Generic[T]):
         """
         current: LinkedList._Node | None = self._head
         
-        for i in range(self._length):
+        while current:
             callback(current.value)
 
             current = current.next
