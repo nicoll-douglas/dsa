@@ -1,6 +1,8 @@
 from ds import Array
 from typing import TypeVar
 
+T = TypeVar("T")
+
 def quick_sort(arr: Array[T]) -> None:
     """Sort an array using the quick sort algorithm."""
     def _quick_sort_rec(arr: Array[T], low: int, high: int) -> None:
