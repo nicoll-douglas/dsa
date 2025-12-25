@@ -5,8 +5,6 @@ from .array import Array
 
 K = TypeVar("K")
 V = TypeVar("V")
-Bucket: TypeAlias = LinkedList[tuple[K, V]]
-BucketArray: TypeAlias = Array[Bucket]
 
 class HashMap(Generic[K, V]):
     class Entry:
