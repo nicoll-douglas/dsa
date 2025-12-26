@@ -148,8 +148,11 @@ class LinkedList(Generic[T]):
 
         if index == 0:
             value: T = self._head.value
-            self._head = self._head.next
+            head: LinkedList._Node = self._head
+            self._head = self._head.next # move head pointer to next node
+            head.next = None # detach old head from linked list
 
+            # if the head was the only node (which we just removed), nullify the tail
             if self._length == 1:
                 self._tail = None
             # fi
@@ -157,8 +160,11 @@ class LinkedList(Generic[T]):
             node_behind: LinkedList._Node = self._traverse(index - 1)
             node: LinkedList._Node = node_behind.next
             value: T = node.value
-            node_behind.next = node.next
 
+            node_behind.next = node.next # point node behind to node ahead
+            node.next = None # detach old node
+
+            # if we just removed the tail, make the tail point to the node behind
             if index == self._length - 1:
                 self._tail = node_behind
             # fi
