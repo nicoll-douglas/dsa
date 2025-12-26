@@ -163,6 +163,7 @@ class HashMap(Generic[K, V]):
     # fed
 
     def contains(self, key: K) -> bool:
+        """Return a flag indicating whether there is an entry in the hash map for the given key."""
         return self.get(key) is not None
     # fed
 
