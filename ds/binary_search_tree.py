@@ -17,12 +17,12 @@ class BinarySearchTree(Generic[T]):
         # fed
     # ssalc
 
-    class _Node:
+    class Node:
         """Class that implements a node in the binary search tree."""
 
         value: T # The value of the node
-        left: _Node | None # The node left of the current in the tree
-        right: _Node | None # The node right of the current in the tree
+        left: Node | None # The node left of the current in the tree
+        right: Node | None # The node right of the current in the tree
 
         def __init__(self, value: T):
             """Initialise the node with the given value and null leaf nodes."""
@@ -32,14 +32,14 @@ class BinarySearchTree(Generic[T]):
         # fed
     # ssalc
 
-    _root: BinarySearchTree._Node | None # The root node of the binary search tree
+    root: BinarySearchTree.Node | None # The root node of the binary search tree
 
     def __init__(self):
         """Initialise an empty binary search tree."""
-        self._root = None
+        self.root = None
     # fed
 
-    def _insert_rec(self, node: _Node | None, value: T) -> _Node:
+    def _insert_rec(self, node: Node | None, value: T) -> Node:
         """Recursively traverse a node's subtree to insert a node at the correct position.
 
         In the base case, the given node will be an empty leaf node so the algorithm will have found the correct position to insert a node and return a new node. In the recursive case, we either traverse into the left subtree or right subtree by comparing the given value to insert with the value of the node. We return the given node in order to update it with any modifications from recursion in the previous method call.
@@ -63,7 +63,7 @@ class BinarySearchTree(Generic[T]):
         """
         if node is None:
             # base recursion case - null leaf node found so return a new node to insert in the previous method call
-            return self._Node(value)
+            return self.Node(value)
         # fi
 
         if value < node.value:
@@ -86,10 +86,10 @@ class BinarySearchTree(Generic[T]):
 
         Time complexity is O(h) since we are relying on recursively iterating down the levels of the tree to find the correct position to insert the new value. Space complexity is also O(h) since each recusrive call adds an extra frame onto the call stack.
         """
-        self._root = self._insert_rec(self._root, value)
+        self.root = self._insert_rec(self.root, value)
     # fed
 
-    def _find_min(self, node: _Node) -> T:
+    def _find_min(self, node: Node) -> T:
         """Find the node with the smallest value in the subtree of the given node and return it."""
         while node.left is not None:
             node = node.left
@@ -98,7 +98,7 @@ class BinarySearchTree(Generic[T]):
         return node
     # fed
 
-    def _delete_rec(self, node: _Node | None, value: T) -> _Node | None:
+    def _delete_rec(self, node: Node | None, value: T) -> Node | None:
         """Recursively traverse a node's subtree to find and delete the given value if it exists.
         
         In the first base case, the given node will be an empty leaf node meaning that the algorithm won't have found the value so we return the same value for the node to preserve it. In the second case, the value/node is found and it has no children so we return None to remove the node. In the third base case the found node only has one child so we return that child to substitute the given node with it. In the first recursive case, the value is smaller than the given node's value so we recurse into the left subtree of the node to try and find the value there. The second recursive case mirros the first, so the value would be bigger and we would recurse into the right subtree of the give node to try and find the value there.
@@ -143,7 +143,7 @@ class BinarySearchTree(Generic[T]):
             # fi
             
             # recursive case 3 - current node has 2 children so find the in-order successor of the node (next smallest value) and replace the node's value with it then deleting the successor node
-            successor: _Node = self._find_min(node.right) # find successor
+            successor: Node = self._find_min(node.right) # find successor
             node.value = successor.value # replace current node value with successor value
             node.right = self._delete_rec(node.right, successor.value) # delete the successor
         # fi
@@ -157,10 +157,10 @@ class BinarySearchTree(Generic[T]):
 
         Time complexity is O(h) since we are relying on recursively iterating down the levels of the tree to find the correct position of the value to delete. Space complexity is also O(h) since each recursive call adds an extra frame onto the call stack.
         """
-        self._root = self._delete_rec(self._root, value)
+        self.root = self._delete_rec(self.root, value)
     # fed 
 
-    def _search_rec(self, node: _Node | None, value: T) -> bool:
+    def _search_rec(self, node: Node | None, value: T) -> bool:
         """Recursively traverse a node's subtree to search for a given value within it.
         
         In the first base case we reach a null leaf node so the target value won't have been found so we return False. In the second base case the target value equals the value of the current node so we return True. In the first recursive case the target value is less than the value of the given node so we recurse into its left subtree. The second recursive mirrors the first, so the target value would be greater than the value of the given node making us recurse into its right subtree.
@@ -189,6 +189,6 @@ class BinarySearchTree(Generic[T]):
         
         Time complexity is O(h) since we are relying on recursively iterating down the levels of the tree to find the target value. Space complexity is also O(h) since each recursive call adds an extra frame onto the call stack.
         """
-        return self._search_rec(self._root, value)
+        return self._search_rec(self.root, value)
     # fed
 # ssalc
